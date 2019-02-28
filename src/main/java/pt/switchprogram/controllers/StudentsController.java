@@ -3,6 +3,7 @@ package pt.switchprogram.controllers;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import pt.switchprogram.domain.Course;
 import pt.switchprogram.domain.Student;
 import pt.switchprogram.repositories.StudentRepository;
 
@@ -21,8 +22,10 @@ public class StudentsController {
     }
 
     @GetMapping
-    public Collection<Student> students() {
-        return studentRepository.findAll();
+    public Collection<Student> students(@RequestParam(value = "course", required = false) Course course) {
+        return Optional.ofNullable(course)
+                .map(studentRepository::findStudentByPreviousCourse)
+                .orElse(studentRepository.findAll());
     }
 
     @PostMapping
@@ -38,10 +41,13 @@ public class StudentsController {
         Optional<Student> studentOptional = studentRepository.findById(id);
         if (!studentOptional.isPresent()) {
             return ResponseEntity.notFound().build();
+        } else {
+            Student existingStudent = studentOptional.get();
+            existingStudent.setName(student.getName());
+            existingStudent.setPreviousCourse(student.getPreviousCourse());
+            studentRepository.save(existingStudent);
+            return ResponseEntity.ok(existingStudent);
         }
-        student.setId(id);
-        studentRepository.save(student);
-        return ResponseEntity.ok(student);
     }
 
     @DeleteMapping("/{id}")
