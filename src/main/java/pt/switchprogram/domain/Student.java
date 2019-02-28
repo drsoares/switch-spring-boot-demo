@@ -1,8 +1,24 @@
 package pt.switchprogram.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "students")
 public class Student {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Version
+    @JsonIgnore
+    private Long version;
+
     private String name;
+
+    @Enumerated(EnumType.STRING)
     private Course previousCourse;
 
     public Long getId() {
@@ -27,5 +43,13 @@ public class Student {
 
     public void setPreviousCourse(Course previousCourse) {
         this.previousCourse = previousCourse;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
+    }
+
+    public Long getVersion() {
+        return version;
     }
 }

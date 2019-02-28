@@ -1,16 +1,7 @@
 package pt.switchprogram.repositories;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import pt.switchprogram.domain.Student;
 
-import java.util.Collection;
-import java.util.Optional;
-
-public interface StudentRepository {
-    Collection<Student> findAll();
-
-    Student save(Student student);
-
-    Optional<Student> findById(long id);
-
-    void deleteById(long id);
+public interface StudentRepository extends JpaRepository<Student, Long> {
 }
