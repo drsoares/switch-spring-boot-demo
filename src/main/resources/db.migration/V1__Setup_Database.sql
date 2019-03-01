@@ -1,0 +1,9 @@
+CREATE SCHEMA IF NOT EXISTS switch;
+
+CREATE TABLE switch.students (
+  id BIGINT NOT NULL AUTO_INCREMENT,
+  version BIGINT NOT NULL DEFAULT 0,
+  name VARCHAR(100) NOT NULL,
+  previous_course VARCHAR(100) NOT NULL,
+  PRIMARY KEY(id)
+);
